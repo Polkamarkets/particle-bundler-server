@@ -226,7 +226,7 @@ export class TaskService {
             return true;
         }
 
-        return this.canRun && this.configService.get('NODE_APP_INSTANCE') === '0';
+        return this.canRun && process.env.DYNO && process.env.DYNO === 'web.1';
     }
 
     @Cron('0 * * * * *')
