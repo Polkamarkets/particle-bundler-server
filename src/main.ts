@@ -36,7 +36,7 @@ async function bootstrap() {
         Alert.sendMessage(`Particle Bundler Server Started, ENVIRONMENT: ${process.env.ENVIRONMENT}`);
     }
 
-    const server = await app.listen(3000, '0.0.0.0');
+    const server = await app.listen(5000, '0.0.0.0');
 
     if (!IS_DEVELOPMENT) {
         process.on('uncaughtException', async (error) => {
