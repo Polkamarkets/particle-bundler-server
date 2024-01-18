@@ -2,10 +2,6 @@ export const DEFAULT_ENTRY_POINT_ADDRESS = '0x5FF137D4b0FDCD49DcA30c7CF57E578a02
 
 export const RPC_CONFIG = [
     {
-        chainId: 10200,
-        rpcUrl: 'https://rpc.chiadochain.net',
-    },
-    {
         chainId: 100,
         rpcUrl: 'https://rpc.gnosischain.com',
     },
@@ -28,10 +24,8 @@ export const MINIMUM_GAS_FEE = {
     // '100': { gasPrice: '0x5f5e100' },
 };
 export const CHAIN_BALANCE_RANGE = {
-    '10200': 0.1,
     '100': 0.01,
 };
 export const CHAIN_SIGNER_MIN_BALANCE = {
-    '10200': 0.1,
     '100': 0.01,
 };
