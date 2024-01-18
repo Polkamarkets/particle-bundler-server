@@ -165,19 +165,25 @@ export async function trySendAndUpdateTransactionStatus(
     Lock.release(keyLock);
 }
 
+function calculateGasPrice(gasPrice: string) {
+    // gets gas price and compares it with the minimum gas price
+    const minGasPrice = process.env.MIN_GAS_PRICE;
+    return minGasPrice && BigNumber.from(minGasPrice).gt(gasPrice) ? minGasPrice : gasPrice;
+}
+
 // TODO: set min fee to ensure the transaction is sent successfully
 export function createTxGasData(chainId: number, feeData: any) {
     if (!SUPPORT_EIP_1559.includes(chainId)) {
         return {
             type: 0,
-            gasPrice: feeData.gasPrice ?? 0,
+            gasPrice: feeData.gasPrice ? calculateGasPrice(feeData.gasPrice) : 0,
         };
     }
 
     return {
         type: 2,
-        maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ?? 0,
-        maxFeePerGas: feeData.maxFeePerGas ?? 0,
+        maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ? calculateGasPrice(feeData.maxPriorityFeePerGas) : 0,
+        maxFeePerGas: feeData.maxFeePerGas ? calculateGasPrice(feeData.maxFeePerGas) : 0,
     };
 }
 
