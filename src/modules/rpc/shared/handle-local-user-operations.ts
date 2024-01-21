@@ -83,6 +83,9 @@ async function sealUserOps(
         for (let index = 0; index < userOperationsToPack.length; index++) {
             const userOperation = userOperationsToPack[index];
 
+            // Logging operation
+            Logger.log(`SealUserOps On Chain ${chainId}: Processing ${userOperation.userOpHash}`);
+
             // if bundle is full, push it to bundles array
             const calcedGasLimit = calcUserOpTotalGasLimit(userOperation.origin);
             const newTotalGasLimit = totalGasLimit.add(calcedGasLimit);
