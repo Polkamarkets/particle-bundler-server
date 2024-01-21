@@ -62,8 +62,8 @@ async function sealUserOps(
 
         console.log('a.userOpNonce', a.userOpNonce);
         console.log('a.userOpHash', a.userOpHash);
-        console.log('b.userOpNonce', a.userOpNonce);
-        console.log('b.userOpHash', a.userOpHash);
+        console.log('b.userOpNonce', b.userOpNonce);
+        console.log('b.userOpHash', b.userOpHash);
         console.log('BigNumber.from(a.userOpNonce)', BigNumber.from(a.userOpNonce));
         console.log('BigNumber.from(b.userOpNonce)', BigNumber.from(b.userOpNonce));
 
