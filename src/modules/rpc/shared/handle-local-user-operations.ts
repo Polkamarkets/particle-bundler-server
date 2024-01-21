@@ -60,8 +60,6 @@ async function sealUserOps(
             return r1;
         }
 
-        console.log('a.userOpNonce > b.userOpNonce?', a.userOpNonce > b.userOpNonce);
-
         return a.userOpNonce > b.userOpNonce ? 1 : -1;
     });
 
