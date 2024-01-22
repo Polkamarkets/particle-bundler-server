@@ -41,7 +41,7 @@ export class UserOperationService {
             const transaction = await this.transactionModel.findOne({ chainId, txHash: userOpDoc.txHash });
             // Allowing to replace tx if it happened more than 60 minutes ago
             if (
-                Date.now() - userOpDoc.createdAt.getTime() > 60 * 60 * 1000 &&
+                Date.now() - userOpDoc.createdAt.getTime() < 60 * 60 * 1000 &&
                 (!transaction || transaction.status !== TRANSACTION_STATUS.FAILED)
             ) {
                 throw new AppException(-32004);
