@@ -39,7 +39,12 @@ export class UserOperationService {
             Helper.assertTrue(userOpDoc.status === USER_OPERATION_STATUS.DONE, -32607);
 
             const transaction = await this.transactionModel.findOne({ chainId, txHash: userOpDoc.txHash });
-            if (!transaction || transaction.status !== TRANSACTION_STATUS.FAILED) {
+            // Allowing to replace tx if it happened more than 60 minutes ago
+            if (
+                !transaction ||
+                transaction.status !== TRANSACTION_STATUS.FAILED ||
+                Date.now() - transaction.latestSentAt.getTime() > 60 * 60 * 1000
+            ) {
                 throw new AppException(-32004);
             }
 
