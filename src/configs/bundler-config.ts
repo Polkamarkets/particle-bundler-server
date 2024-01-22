@@ -27,5 +27,5 @@ export const CHAIN_BALANCE_RANGE = {
     '100': 0.1,
 };
 export const CHAIN_SIGNER_MIN_BALANCE = {
-    '100': 2,
+    '100': 1,
 };
