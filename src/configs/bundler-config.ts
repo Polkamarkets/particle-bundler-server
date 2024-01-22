@@ -24,8 +24,8 @@ export const MINIMUM_GAS_FEE = {
     // '100': { gasPrice: '0x5f5e100' },
 };
 export const CHAIN_BALANCE_RANGE = {
-    '100': 0.01,
+    '100': 0.1,
 };
 export const CHAIN_SIGNER_MIN_BALANCE = {
-    '100': 0.01,
+    '100': 1,
 };
