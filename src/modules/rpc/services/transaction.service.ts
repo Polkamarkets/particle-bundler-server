@@ -15,6 +15,10 @@ export class TransactionService {
         return await this.transactionModel.findOne({ chainId, txHash });
     }
 
+    public async getTransactionByNonceAndFromAddress(nonce: number, address: string): Promise<TransactionDocument> {
+        return await this.transactionModel.findOne({ nonce, address });
+    }
+
     public async getTransactionsByStatus(status: TRANSACTION_STATUS, limit: number): Promise<TransactionDocument[]> {
         return await this.transactionModel.find({ status }).sort({ from: 1, nonce: 1 }).limit(limit);
     }
@@ -115,6 +119,18 @@ export class TransactionService {
                 },
             },
             { session },
+        );
+    }
+
+    public async updateTransactionBackToPending(transaction: TransactionDocument) {
+        // update transaction status back to pending, for id > than transaction.id
+        return await this.transactionModel.updateMany(
+            {
+                chainId: transaction.chainId,
+                from: transaction.from,
+                nonce: { $gte: transaction.nonce },
+            },
+            { $set: { status: TRANSACTION_STATUS.PENDING } },
         );
     }
 }

@@ -16,6 +16,19 @@ import { Alert } from '../../../common/alert';
 import { ProcessNotify } from '../../../common/process-notify';
 import { METHOD_SEND_RAW_TRANSACTION } from '../../../configs/bundler-common';
 
+const handleDifferentRemoteNonce = async (remoteNonce: number, fromAddress: string, aaService: AAService) => {
+    Logger.log('handleDifferentRemoteNonce');
+    const transaction = await aaService.transactionService.getTransactionByNonceAndFromAddress(remoteNonce, fromAddress);
+
+    if (transaction) {
+        try {
+            await aaService.transactionService.updateTransactionBackToPending(transaction);
+        } catch (error) {
+            console.log('error:', error);
+        }
+    }
+};
+
 export async function tryIncrTransactionGasPrice(
     transaction: TransactionDocument,
     mongodbConnection: Connection,
@@ -34,6 +47,7 @@ export async function tryIncrTransactionGasPrice(
         const remoteNonce = await aaService.getTransactionCountLocalCache(provider, transaction.chainId, transaction.from, true);
         if (remoteNonce != transaction.nonce) {
             Logger.log('tryIncrTransactionGasPrice release', 'remoteNonce != transaction.nonce', remoteNonce, transaction.nonce);
+            await handleDifferentRemoteNonce(remoteNonce, transaction.from, aaService);
             Lock.release(keyLock);
             return;
         }
@@ -66,7 +80,7 @@ export async function tryIncrTransactionGasPrice(
     Logger.log('Try Replace Transaction', transaction.txHash);
 
     try {
-        const coefficient = 1.1;
+        const coefficient = 2;
 
         const currentSignedTx = transaction.signedTxs[transaction.txHash];
         const tx = tryParseSignedTx(currentSignedTx);
