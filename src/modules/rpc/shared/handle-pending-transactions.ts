@@ -80,7 +80,7 @@ export async function tryIncrTransactionGasPrice(
     Logger.log('Try Replace Transaction', transaction.txHash);
 
     try {
-        const coefficient = 2;
+        const coefficient = 1.1;
 
         const currentSignedTx = transaction.signedTxs[transaction.txHash];
         const tx = tryParseSignedTx(currentSignedTx);
@@ -121,10 +121,12 @@ export async function tryIncrTransactionGasPrice(
 
         if (tx instanceof LegacyTransaction) {
             if (BigNumber.from(feeData.gasPrice).gt(tx.gasPrice)) {
-                txData.gasPrice = BigNumber.from(feeData.gasPrice).toHexString();
+                txData.gasPrice = BigNumber.from(feeData.gasPrice);
+            } else {
+                txData.gasPrice = BigNumber.from(tx.gasPrice);
             }
 
-            txData.gasPrice = BigNumber.from(tx.gasPrice)
+            txData.gasPrice = txData.gasPrice
                 .mul(coefficient * 10)
                 .div(10)
                 .toHexString();
