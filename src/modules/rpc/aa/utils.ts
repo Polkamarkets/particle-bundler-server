@@ -129,7 +129,7 @@ export function calcUserOpGasPrice(feeData: any, baseFee = 0): number {
     return Math.min(BigNumber.from(feeData.maxFeePerGas).toNumber(), BigNumber.from(feeData.maxPriorityFeePerGas).toNumber() + baseFee);
 }
 
-export function splitOriginNonce(originNonce: string) {
+export function splitOriginNonceOriginal(originNonce: string) {
     const bn = BigNumber.from(originNonce);
     const key = bn.shr(64);
 
@@ -140,6 +140,19 @@ export function splitOriginNonce(originNonce: string) {
     }
 
     return { nonceKey: key.toHexString(), nonceValue: BigNumber.from(valueString).toHexString() };
+}
+
+export function splitOriginNonce(originNonce: string) {
+    // Assuming `bigIntValue` is your 256-bit integer as a BigInt
+    const bigIntValue = BigInt(originNonce);
+
+    // To get the first 192 bits, shift right by 64 bits
+    const key = bigIntValue >> BigInt(64);
+
+    // To get the last 64 bits, perform a bitwise AND with a mask of 64 1's
+    const sequence = bigIntValue & BigInt('0xffffffffffffffff');
+
+    return { nonceKey: BigNumber.from(key).toHexString(), nonceValue: BigNumber.from(sequence).toHexString() };
 }
 
 export function getUserOpHash(chainId: number, userOp: any, entryPoint: string) {
