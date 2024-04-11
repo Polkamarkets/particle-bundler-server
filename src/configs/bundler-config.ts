@@ -5,6 +5,14 @@ export const RPC_CONFIG = [
         chainId: 100,
         rpcUrl: 'https://rpc.gnosischain.com',
     },
+    {
+        chainId: 10200,
+        rpcUrl: 'https://rpc.chiadochain.net/',
+    },
+    {
+        chainId: 80001,
+        rpcUrl: 'https://polygon-mumbai.blockpi.network/v1/rpc/public',
+    },
 ];
 
 export const PARTICLE_PUBLIC_RPC_URL = 'https://rpc.particle.network/evm-chain/public';

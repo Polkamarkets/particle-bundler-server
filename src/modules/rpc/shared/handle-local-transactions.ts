@@ -165,9 +165,9 @@ export async function trySendAndUpdateTransactionStatus(
     Lock.release(keyLock);
 }
 
-function calculateGasPrice(gasPrice: string) {
+function calculateGasPrice(chainId: number, gasPrice: string) {
     // gets gas price and compares it with the minimum gas price
-    const minGasPrice = process.env.MIN_GAS_PRICE;
+    const minGasPrice = process.env[`MIN_GAS_PRICE_${chainId}`];
     return minGasPrice && BigNumber.from(minGasPrice).gt(gasPrice) ? minGasPrice : gasPrice;
 }
 
@@ -176,14 +176,14 @@ export function createTxGasData(chainId: number, feeData: any) {
     if (!SUPPORT_EIP_1559.includes(chainId)) {
         return {
             type: 0,
-            gasPrice: feeData.gasPrice ? calculateGasPrice(feeData.gasPrice) : 0,
+            gasPrice: feeData.gasPrice ? calculateGasPrice(chainId, feeData.gasPrice) : 0,
         };
     }
 
     return {
         type: 2,
-        maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ? calculateGasPrice(feeData.maxPriorityFeePerGas) : 0,
-        maxFeePerGas: feeData.maxFeePerGas ? calculateGasPrice(feeData.maxFeePerGas) : 0,
+        maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ? calculateGasPrice(chainId, feeData.maxPriorityFeePerGas) : 0,
+        maxFeePerGas: feeData.maxFeePerGas ? calculateGasPrice(chainId, feeData.maxFeePerGas) : 0,
     };
 }
 
